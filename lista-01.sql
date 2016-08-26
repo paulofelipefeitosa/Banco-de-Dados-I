@@ -172,7 +172,7 @@ ORDER BY nome
 
 SELECT *
 FROM Pedido
-WHERE via = 'A' and frete >= 300.00
+WHERE via = 'A' and frete >= 300.00 --Saber como está os valores da coluna VIA
 ORDER BY idpedido
 
 -- Questão 25
