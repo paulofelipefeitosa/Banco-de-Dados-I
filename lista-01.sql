@@ -172,7 +172,7 @@ ORDER BY nome
 
 SELECT *
 FROM Pedido
-WHERE via = 'A' and frete >= 300.00 --Saber como está os valores da coluna VIA
+WHERE via = 'A' and frete >= 300.00
 ORDER BY idpedido
 
 -- Questão 25
@@ -181,3 +181,174 @@ SELECT *
 FROM Funcionario
 WHERE email IS NULL and celular IS NOT NULL
 ORDER BY nome
+
+-- Questão 26
+
+SELECT COUNT(*) AS [Quantidade]
+FROM Cidade
+WHERE idpais <> (SELECT idpais
+				 FROM Pais
+				 WHERE nome LIKE 'Brasil')
+				 
+-- Questão 27
+
+SELECT COUNT(*) AS [Quantidade]
+FROM Funcionario
+WHERE email IS NOT NULL
+
+-- Questão 28
+
+SELECT SUM(venda * qntest) AS [Total Geral]
+FROM Produto
+
+-- Questão 29
+
+SELECT SUM(frete) AS [Soma dos Fretes]
+FROM Pedido
+WHERE via = 'M' -- Verificar os dados no Banco
+
+-- Questão 30 - 01
+
+SELECT AVG(salario) AS [Media]
+FROM Funcionario
+WHERE sexo = 'F' and salario BETWEEN 1000.00 and 2000.00
+		and idsetor NOT IN ('PRS', 'MKT')
+
+-- Questão 30 - 02
+
+SELECT AVG(salario) AS [Media]
+FROM Funcionario
+WHERE sexo = 'F' and salario BETWEEN 1000.00 and 2000.00
+		and idsetor NOT LIKE 'PRS' and idsetor NOT LIKE 'MKT'
+		
+-- Questão 31
+
+SELECT AVG(salario) AS [Media]
+FROM Funcionario
+WHERE idfuncao NOT IN (10, 11) and estcivil <> 'C' --Verificar os dados no banco
+
+-- Questão 32
+
+SELECT AVG(venda) AS [Media]
+FROM Produto
+WHERE idproduto = 1
+
+-- Questão 33
+
+SELECT MIN(datanasc) AS [Data]
+FROM Funcionario
+WHERE sexo = 'F'
+
+-- Questao 34
+
+SELECT MAX(preco) AS [Mais caro]
+FROM Itens
+
+-- Questão 35
+
+SELECT MAX(datapedid) AS [Data]
+FROM Pedido
+
+-- Questão 36
+
+SELECT MONTH(MIN(datapedid)) AS [Mês]
+FROM Pedido
+WHERE via = 'A'
+
+-- Questão 37
+
+SELECT MAX(quant) AS [Maximo], idpedido
+FROM Pedido
+GROUP BY idpedido
+
+-- Questão 38
+
+SELECT SUM(salario) AS [Total], idsetor
+FROM Funcionario
+GROUP BY idsetor
+HAVING SUM(salario) > 5000.00
+
+-- Questão 39
+
+SELECT AVG(custo) AS [Custo], AVG(venda) AS [Venda], (Venda - Custo), idtipo
+FROM Produto
+GROUP BY idtipo
+
+-- Questão 40
+
+SELECT idproduto, COUNT(idpedido) AS [Quantidade]
+FROM Itens
+GROUP BY idproduto
+HAVING COUNT(idpedido) > 20
+
+-- Questão 41
+
+SELECT AVG(DATEDIFF(hour, datanasc, GETDATE())/8766) AS [Idade Media], idsetor, sexo
+FROM Funcionario
+GROUP BY idsetor, sexo
+HAVING AVG(DATEDIFF(hour, datanasc, GETDATE())/8766) < 40
+
+-- Questão 42
+
+SELECT COUNT(idfuncionario) AS [Quantidade], idnatural, sexo
+FROM Funcionario
+GROUP BY idnatural, sexo
+HAVING COUNT(idfuncionario) >= 3
+
+-- Questão 43
+
+SELECT COUNT(idcidade) AS [Quantidade], idpais
+FROM Cidade
+GROUP BY idpais
+HAVING COUNT(idcidade) > 5
+
+-- Questão 44
+
+SELECT idcliente, YEAR(datapedid) AS [Ano], COUNT(idpedido) AS [Quantidade]
+FROM Pedido
+GROUP BY idcliente, YEAR(datapedid)
+HAVING COUNT(idpedido) > 5
+
+-- Questão 45
+
+SELECT AVG(custo) AS [Custo], AVG(venda) AS [Venda], ((Venda-Custo)*100.00)/Venda AS [Diferenca], idtipo
+FROM Produto
+GROUP BY idtipo
+HAVING Diferenca > 40.00
+
+-- Questão 46
+
+SELECT SUM(salario) AS [Soma Total], AVG(salario) AS [Media], sexo
+FROM Funcionario
+GROUP BY sexo
+HAVING estcivil = 'S' and salario > 1500.00
+
+-- Questão 47
+
+SELECT MONTH(datapedid), AVG(frete), YEAR(datafatura), MONTH(datafatura)
+FROM Pedido
+GROUP BY YEAR(datafatura), MONTH(datafatura)
+HAVING YEAR(datafatura) = 1998
+
+-- Questão 48
+
+SELECT idpedido, SUM(quant), SUM(preco*quant) AS [Total]
+FROM Itens
+GROUP BY idpedido
+HAVING Total > 1000.00
+
+-- Questão 49
+
+SELECT COUNT(idfuncionario) AS [Quantidade], idsetor, idfuncao
+FROM Funcionario
+GROUP BY idsetor, idfuncao
+HAVING estcivil <> 'V' --Verificar os dados no Banco
+
+-- Questão 50
+
+SELECT COUNT(idcidade) AS [Quantidade], idpais
+FROM Cidade
+GROUP BY idpais
+HAVING COUNT(idcidade) > 3 and idpais <> (SELECT idpais
+											FROM Pais
+											WHERE nome = 'Brasil')
